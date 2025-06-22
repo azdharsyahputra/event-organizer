@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-searchbar
+      placeholder="Cari event..."
+      (ionInput)="filterEvent($event)"
+      showClearButton="always">
+    </ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+
+  <!-- Tombol tambah event -->
+  <ion-button expand="block" color="success" class="mb-3" [routerLink]="['/admin/add-event']">
+    ➕ Tambah Event
+  </ion-button>
+
+  <!-- Daftar event -->
+<div class="admin-card" *ngFor="let event of filteredEvents">
+  <h2 class="event-title">{{ event.nama }}</h2>
+  <p><strong>Tanggal:</strong> {{ event.waktu_mulai | date:'dd MMMM yyyy' }}</p>
+  <p><strong>Kuota:</strong> {{ event.kuota }} Peserta</p>
+  <p><strong>Lokasi:</strong> {{ event.lokasi }}</p>
+
+  <ion-button size="small" fill="outline" color="primary" [routerLink]="['/event-detail', event.id]">
+    Lihat Detail
+  </ion-button>
+</div>
+
+</ion-content>
+
+<!-- Footer -->
+<app-footer-navbar></app-footer-navbar>

@@ -1,0 +1,44 @@
+<ion-header>
+  <!-- Search Bar -->
+  <ion-toolbar>
+    <ion-searchbar 
+      placeholder="Cari peserta..."
+      showClearButton="always"
+      (ionInput)="filterPeserta($event)">
+    </ion-searchbar>
+  </ion-toolbar>
+
+  <!-- Dropdown Event -->
+  <ion-toolbar>
+    <ion-select 
+      placeholder="Pilih Event" 
+      interface="popover"
+      [(ngModel)]="selectedEvent"
+      (ionChange)="onEventChange($event)">
+      <ion-select-option value="all">Semua Event</ion-select-option>
+      <ion-select-option *ngFor="let event of events" [value]="event.id">
+        {{ event.nama }}
+      </ion-select-option>
+    </ion-select>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding content-with-header">
+
+  <!-- Daftar Peserta -->
+  <div *ngFor="let user of filteredParticipants" class="user-card">
+    <div class="user-info">
+      <h2 class="user-name">{{ user.name }}</h2>
+      <p class="user-email">{{ user.email }}</p>
+    </div>
+    <div class="user-action">
+      <ion-button size="small" fill="outline" color="primary" [routerLink]="['/admin/user-detail', user.id]">
+        Detail
+      </ion-button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+<app-footer-navbar></app-footer-navbar>
+
+</ion-content>
