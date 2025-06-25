@@ -102,6 +102,10 @@ const routes: Routes = [
   {
     path: '**',
     redirectTo: 'login'
+  },
+  {
+    path: 'logout',
+    loadChildren: () => import('./logout/logout.module').then( m => m.LogoutPageModule)
   }
 ];
 

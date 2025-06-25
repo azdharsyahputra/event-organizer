@@ -12,6 +12,7 @@
 
   <ng-container *ngIf="filteredEvents.length > 0; else noEvents">
     <div class="event-card" *ngFor="let event of filteredEvents">
+      <img *ngIf="event?.image" [src]="getImageUrl(event.image)" alt="Foto Event" />
       <div class="event-header">
         <h2 class="event-title">{{ event.nama }}</h2>
         <p class="event-subtitle">{{ event.jenis | titlecase }} - {{ event.lokasi }}</p>
@@ -25,7 +26,6 @@
         </p>
         <p><strong>Kuota:</strong> {{ event.kuota }} peserta</p>
         <p><strong>Sertifikat:</strong> {{ event.mengeluarkan_sertifikat ? '✅ Tersedia' : '❌ Tidak tersedia' }}</p>
-
       <ion-button expand="block" color="primary" [routerLink]="['/event-detail', event.id]">
         Lihat Detail
       </ion-button>

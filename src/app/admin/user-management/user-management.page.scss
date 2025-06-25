@@ -83,7 +83,29 @@ ion-select {
   color: #666;
 }
 
-.user-action {
+.user-event {
+  font-size: 14px;
+  color: #333;
+  margin: 6px 0 12px;
+}
+
+.user-actions {
   display: flex;
+  gap: 12px;
   align-items: center;
+  margin-top: 10px;
+}
+
+.payment-status-item {
+  --background: #f1f1f1;
+  --color: #222;
+  border-radius: 8px;
+  flex: 1;
+  max-width: 60%;
+}
+
+.lihat-bukti-button {
+  height: 40px;
+  font-size: 14px;
+  flex-shrink: 0;
 }

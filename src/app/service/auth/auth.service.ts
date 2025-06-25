@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -28,26 +28,37 @@ export class AuthService {
       withCredentials: true,
     });
   }
+
   login(credentials: any): Observable<any> {
-  return this.http.post('http://127.0.0.1:8000/api/auth/login', credentials, {
-    withCredentials: true
-  });
-}
-getRole(): string {
-  const userStr = localStorage.getItem('user');
-  if (!userStr) {
-    console.warn('⚠️ Tidak ada user di localStorage');
-    return '';
+    return this.http.post(`${this.apiUrl}/api/auth/login`, credentials, {
+      withCredentials: true,
+    });
   }
-  const user = JSON.parse(userStr);
-  console.log('📦 getRole() ->', user.role);
-  return user?.role || '';
-}
 
-isLoggedIn(): boolean {
-  const token = localStorage.getItem('token');
-  console.log('🔐 isLoggedIn() ->', !!token);
-  return !!token;
-}
+  getRole(): string {
+    const userStr = localStorage.getItem('user');
+    if (!userStr) {
+      console.warn('⚠️ Tidak ada user di localStorage');
+      return '';
+    }
+    const user = JSON.parse(userStr);
+    console.log('📦 getRole() ->', user.role);
+    return user?.role || '';
+  }
 
+  isLoggedIn(): boolean {
+    const token = localStorage.getItem('token');
+    console.log('🔐 isLoggedIn() ->', !!token);
+    return !!token;
+  }
+
+  logout(): Observable<any> {
+    const token = localStorage.getItem('token') || '';
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/json'
+    });
+
+    return this.http.post(`${this.apiUrl}/api/auth/logout`, {}, { headers });
+  }
 }

@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { HttpHeaders } from '@angular/common/http';
+import { map } from 'rxjs/operators';
+
 
 @Injectable({
   providedIn: 'root'
@@ -97,6 +99,48 @@ updateAttendance(eventId: number, userId: number) {
 }
 getEventStatistik(eventId: number) {
   return this.http.get<any>(`${this.apiUrl}/events/${eventId}/statistic`);
+}
+getPesertaHTMLByEventId(eventId: number): Observable<any[]> {
+  const token = localStorage.getItem('token');
+  const headers = {
+    Authorization: `Bearer ${token}`
+  };
+
+  return this.http.get<any>(`http://localhost:8000/api/events/peserta-berbayar/${eventId}`, { headers })
+    .pipe(map(res => res.data)); // 👈 ambil hanya data[]
+}
+konfirmasiPembayaran(participantId: number): Observable<any> {
+  const token = localStorage.getItem('token');
+  const headers = {
+    Authorization: `Bearer ${token}`
+  };
+
+  return this.http.put(`http://localhost:8000/api/participants/${participantId}/pembayaran-done`, {}, { headers });
+}
+// Ambil event berbayar khusus dropdown filtering
+getEventBerbayar(): Observable<any[]> {
+  const token = localStorage.getItem('token') || '';
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${token}`,
+    Accept: 'application/json'
+  });
+
+  return this.http.get<any[]>(`${this.apiUrl}/event-berbayar`, { headers });
+}
+uploadBuktiPembayaran(participantId: number, file: File): Observable<any> {
+  const formData = new FormData();
+  formData.append('bukti_pembayaran', file);
+
+  const token = localStorage.getItem('token') || '';
+  const headers = {
+    Authorization: `Bearer ${token}`
+  };
+
+  return this.http.post(
+    `${this.apiUrl}/upload-bukti-pembayaran/${participantId}`,
+    formData,
+    { headers }
+  );
 }
 
 }

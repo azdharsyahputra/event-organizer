@@ -7,14 +7,34 @@
 <ion-content [fullscreen]="true" class="ion-padding">
   <div *ngIf="tickets.length === 0">Belum ada tiket.</div>
 
-  <div *ngFor="let ticket of tickets" class="ticket-card">
-    <div class="ticket-content">
-      <qrcode [qrdata]="'http://127.0.0.1:8000/api/participant/' + ticket.id + '/status'" [width]="160" [errorCorrectionLevel]="'M'"></qrcode>
-      <div class="ticket-info">
-        <h2 class="ticket-title">{{ ticket.event.nama }}</h2>
-        <p><strong>Tanggal:</strong> {{ ticket.event.waktu_mulai | date:'dd MMMM yyyy' }}</p>
+    <div *ngFor="let ticket of tickets" class="ticket-card">
+      <div class="ticket-content">
+        <!-- Jika sudah bayar, tampilkan QR -->
+        <ng-container *ngIf="ticket.status_pembayaran === 'diterima'; else uploadSection">
+          <qrcode
+            [qrdata]="'http://127.0.0.1:8000/api/participant/' + ticket.id + '/status'"
+            [width]="160"
+            [errorCorrectionLevel]="'M'">
+          </qrcode>
+        </ng-container>
+
+        <!-- Jika belum bayar, tampilkan form upload -->
+        <ng-template #uploadSection>
+          <input
+            type="file"
+            (change)="handleFileUpload($event, ticket.id)"
+            accept="image/*"
+            class="file-input"
+          />
+        </ng-template>
+
+        <!-- Info Event -->
+        <div class="ticket-info">
+          <h2 class="ticket-title">{{ ticket.event.nama }}</h2>
+          <p><strong>Tanggal:</strong> {{ ticket.event.waktu_mulai | date:'dd MMMM yyyy' }}</p>
+          <p><strong>Status:</strong> {{ ticket.status_pembayaran }}</p>
+        </div>
       </div>
-    </div>
   </div>
 </ion-content>
 

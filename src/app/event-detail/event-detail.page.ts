@@ -30,9 +30,7 @@ ngOnInit() {
     });
   }
 }
-
-
   getImageUrl(filename: string): string {
-    return `http://127.0.0.1:8000/storage/event/${filename}`;
+    return `http://127.0.0.1:8000/storage/uploads/events/${filename}`;
   }
 }
